@@ -93,8 +93,21 @@ function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
-  const handleSubmit = () => { setSubmitted(true); setTimeout(() => setSubmitted(false), 4000); };
-
+const handleSubmit = async () => {
+    if (!formData.name || !formData.email || !formData.message) return;
+    try {
+      await fetch("https://hook.eu2.make.com/ysph6xgfiuj6byihxvwyfgm3yn5put5j", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      setSubmitted(true);
+      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch (err) {
+      alert("Noget gik galt. Prøv igen eller skriv til hej@onlineerhverv.dk");
+    }
+  };
   const inputStyle = {
     fontFamily: SANS, fontSize: 15, padding: "14px 18px",
     borderRadius: 12, border: "1px solid #e2e8f0", outline: "none",
